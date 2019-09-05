@@ -47,7 +47,12 @@ function editEmployee(employee) {
                     dispatch(success(employee));
                     console.log("empl add=",employee);
                     if(employee.status ===400){
-                        alert(employee.status + 'employee with this name already exist\'s!');
+                        alert(employee.status + 'Bad request!');
+
+                    }
+
+                    if(employee.status ===404){
+                        alert(employee.status + 'Employee not found!');
 
                     }
                     if(employee.status ===200){

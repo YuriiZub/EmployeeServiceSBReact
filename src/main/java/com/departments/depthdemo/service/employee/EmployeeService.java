@@ -12,12 +12,17 @@ import java.util.List;
 public interface EmployeeService {
 
     Employee getEmployeeById(int employeeID);
+
     List<Employee> getEmployeeByName(String employeeName);
+
     List<Employee> getAllEmployee();
+
     List<Employee> getPagedEmployee(PageRequestData pageRequestData);
 
-    Employee saveEmployee(EmployeeDto employeeDto)  throws Exception;
-    Employee updateEmployee(EmployeeDto employeeDto) throws Exception ;
+    Employee saveEmployee(EmployeeDto employeeDto);
+
+    Integer updateEmployee(EmployeeDto employeeDto);
+
     String deleteEmployeeById(Integer employeeID);
 
     Integer getEmployeeCount();

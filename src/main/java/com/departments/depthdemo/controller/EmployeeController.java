@@ -1,6 +1,7 @@
 package com.departments.depthdemo.controller;
 
 import com.departments.depthdemo.dto.InputPaginationDataDto;
+import com.departments.depthdemo.err.EmployeeNotFoundException;
 import com.departments.depthdemo.model.Employee;
 import com.departments.depthdemo.dto.EmployeeDto;
 import com.departments.depthdemo.err.ErrorData;
@@ -92,7 +93,7 @@ public class EmployeeController {
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<Employee> addnNewEmployee(@Validated(EmployeeDto.New.class) @RequestBody EmployeeDto employeeDto) throws Exception {
+    ResponseEntity<Employee> addnNewEmployee(@Validated(EmployeeDto.New.class) @RequestBody EmployeeDto employeeDto){
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         return new ResponseEntity(employeeService.saveEmployee(employeeDto), httpHeaders, HttpStatus.OK);
@@ -101,7 +102,7 @@ public class EmployeeController {
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<Employee> editEmpoyee(@Validated(EmployeeDto.UpdateData.class) @RequestBody EmployeeDto employeeDto) throws Exception {
+    ResponseEntity<Employee> editEmpoyee(@Validated(EmployeeDto.UpdateData.class) @RequestBody EmployeeDto employeeDto) {
         return new ResponseEntity(employeeService.updateEmployee(employeeDto), httpHeaders, HttpStatus.OK);
     }
 
@@ -119,6 +120,14 @@ public class EmployeeController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         return new ResponseEntity(errorData, httpHeaders, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorData> handleException(EmployeeNotFoundException e) {
+        ErrorData errorData = new ErrorData(e.getMessage());
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return new ResponseEntity(errorData, httpHeaders, HttpStatus.NOT_FOUND);
     }
 
 

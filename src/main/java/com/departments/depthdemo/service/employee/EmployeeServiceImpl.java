@@ -1,5 +1,7 @@
 package com.departments.depthdemo.service.employee;
 
+import com.departments.depthdemo.err.EmployeeAlreadyExistsException;
+import com.departments.depthdemo.err.EmployeeNotFoundException;
 import com.departments.depthdemo.model.Employee;
 import com.departments.depthdemo.mapper.EmployeeMapper;
 import com.departments.depthdemo.dto.EmployeeDto;
@@ -54,14 +56,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee saveEmployee(EmployeeDto employeeDto) throws Exception {
-        Employee existEmployee = null;
-        try {
-            existEmployee = employeeMapper.selectEmployeeByName(employeeDto.getName()).get(0);
-        } catch (Exception e) {
+    public Employee saveEmployee(EmployeeDto employeeDto) {
 
-        }
-        if (existEmployee != null) throw new Exception("User already exist");
+        String employeeName = employeeDto.getName();
+        List existEmployees = employeeMapper.selectEmployeeByName(employeeName);
+
+        System.out.println("before saving");
+
+        if (!existEmployees.isEmpty()) throw new EmployeeAlreadyExistsException(employeeName);
 
         employeeMapper.insertEmployee(employeeDto);
 
@@ -71,22 +73,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee updateEmployee(EmployeeDto employeeDto) throws Exception {
+    public Integer updateEmployee(EmployeeDto employeeDto) {
 
-        Employee existEmployee = null;
-        try {
-            existEmployee = employeeMapper.selectEmployeeByName(employeeDto.getName()).get(0);
-        } catch (Exception e) {
+        int updatedRecords =  employeeMapper.updateEmployee(employeeDto);
 
-        }
-        if (existEmployee != null)
-            if (existEmployee.getId() == employeeDto.getId()) throw new Exception("User already exist");
+        System.out.println("updated records = " + updatedRecords);
 
-        employeeMapper.updateEmployee(employeeDto);
+        if(updatedRecords == 0) throw new EmployeeNotFoundException("Id = " + employeeDto.getId());
 
-        Employee updatedEmployee = employeeMapper.selectEmployeeById(employeeDto.getId());
+        System.out.println("updated records before return" );
 
-        return updatedEmployee;
+        return updatedRecords;
     }
 
     @Override

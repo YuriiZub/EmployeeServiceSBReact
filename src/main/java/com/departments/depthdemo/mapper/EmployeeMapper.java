@@ -87,7 +87,7 @@ public interface EmployeeMapper {
             ", empActive = #{active}" +
             ", emp_dpID = #{departmentId} " +
             "where empID =  #{id}")
-    void updateEmployee(EmployeeDto employeeDto);
+    int updateEmployee(EmployeeDto employeeDto);
 
     @Delete("delete from tblemployees where empID = #{dpId}")
     void deleteEmployeeById(@PathParam("dpId") Integer employeeId);
