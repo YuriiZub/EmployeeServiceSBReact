@@ -102,7 +102,7 @@ public class EmployeeController {
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<Employee> editEmpoyee(@Validated(EmployeeDto.UpdateData.class) @RequestBody EmployeeDto employeeDto) {
+    ResponseEntity<Integer> editEmpoyee(@Validated(EmployeeDto.UpdateData.class) @RequestBody EmployeeDto employeeDto) {
         return new ResponseEntity(employeeService.updateEmployee(employeeDto), httpHeaders, HttpStatus.OK);
     }
 
